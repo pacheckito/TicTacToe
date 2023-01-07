@@ -1,4 +1,6 @@
+import java.io.File;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class TicTacToe {
   private char[][] board;     // A 2D array to represent the board
@@ -16,8 +18,7 @@ public class TicTacToe {
   }
   
   public void play() {
-    // Keep playing until the game is over
-    while (!isGameOver()) {
+    while (!isGameOver()) { // Keep playing until the game is over
       printBoard();
       makeMove(); // Check if the current player has won
       if (checkForWin()) { // Announce the winner and end the game
@@ -31,13 +32,34 @@ public class TicTacToe {
   
   private void makeMove() {
     System.out.print("Enter row (0, 1, 2) for player " + currentPlayer + ": ");
-    int row = input.nextInt();
+    int row = -1;
+    while (row < 0 || row > 2) {
+      try {
+        row = input.nextInt();
+        if (row < 0 || row > 2) {
+          System.out.println("Invalid input. Row must be 0, 1, or 2. Try again.");
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Row must be an integer. Try again.");
+        input.nextLine();
+      }
+    }
+    
     System.out.print("Enter column (0, 1, 2) for player " + currentPlayer + ": ");
-    int col = input.nextInt();
-    if (row < 0 || row > 2 || col < 0 || col > 2) { // Check if the chosen spot is within the bounds of the board
-      System.out.println("Invalid move. Try again.");
-      makeMove();
-    } else if (board[row][col] == ' ') { // Make the move
+    int col = -1;
+    while (col < 0 || col > 2) {
+      try {
+        col = input.nextInt();
+        if (col < 0 || col > 2) {
+          System.out.println("Invalid input. Column must be 0, 1, or 2. Try again.");
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Invalid input. Column must be an integer. Try again.");
+        input.nextLine();
+      }
+    }
+    
+    if (board[row][col] == ' ') { // Make the move
       board[row][col] = currentPlayer;
     } else { // The spot is not empty, so prompt the user to try again
       System.out.println("That spot is already taken. Try again.");
